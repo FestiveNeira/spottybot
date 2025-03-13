@@ -1,4 +1,4 @@
-# Your App
+# Name TBD
 ## Overview
 This project includes:
 - **Frontend**: Svelte
