@@ -6,11 +6,7 @@ This project includes:
 - **Database**: PostgreSQL
 - **Desktop App**: Neutralino with an Overlay (GLFW, Ultralight, OpenGL)
 
-
-
-# This app is designed to combine the functionality of two existing spotify song managers.
-
-## That Functionality Includes
+## App Planned Functionality
 
 - one database, with one table per user (named user id)
   - each record is
