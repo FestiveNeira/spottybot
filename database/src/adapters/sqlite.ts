@@ -26,6 +26,13 @@ export class SQLiteAdapter implements DatabaseInterface {
         this.db.prepare(sql).run(...values);
     }
 
+    async create(table: string): Promise<void> {
+        if (!this.db) throw new Error('Database not connected');
+        // Type definitions may have to change especially timestamp, but this is a placeholder for now
+        const sql = `CREATE TABLE IF NOT EXISTS ${table} (timestamp INTEGER NOT NULL, uri TEXT NOT NULL, name TEXT NOT NULL, theme TEXT NOT NULL, rating INTEGER NOT NULL)`;
+        this.db.prepare(sql).run();
+    }
+
     async delete(table: string): Promise<void> {
         if (!this.db) throw new Error('Database not connected');
         const sql = `DROP TABLE ${table}`;

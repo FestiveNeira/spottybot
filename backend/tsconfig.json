@@ -3,8 +3,14 @@
     "target": "ES6",
     "module": "CommonJS",
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": "../",
     "strict": true,
     "esModuleInterop": true
-  }
+  },
+  "include": [
+    // Connects to backend .ts files
+    "../backend/src/**/*.ts",
+    // Connects to database .ts files
+    "../database/src/**/*.ts"
+  ]
 }

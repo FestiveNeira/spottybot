@@ -8,10 +8,21 @@ export class DatabaseService {
 
     constructor(usePostgres: boolean, dbPathOrConnectionString: string) {
         if (usePostgres) {
-            this.db = new PostgresAdapter(dbPathOrConnectionString); // connectionString for Postgres
+            this.db = new PostgresAdapter(dbPathOrConnectionString); // Connection String for Postgres
         } else {
             this.db = new SQLiteAdapter(dbPathOrConnectionString); // Path to SQLite file
         }
+    }
+
+    // Not sure if I should do this, but we'll leave it for now
+    async swapdb(usePostgres: boolean, dbPathOrConnectionString: string) {
+        await this.close();
+        if (usePostgres) {
+            this.db = new PostgresAdapter(dbPathOrConnectionString); // Connection String for Postgres
+        } else {
+            this.db = new SQLiteAdapter(dbPathOrConnectionString); // Path to SQLite file
+        }
+        await this.connect();
     }
 
     async connect(): Promise<void> {
@@ -26,6 +37,10 @@ export class DatabaseService {
         this.db.insert(table, data);
     }
 
+    async create(table: string): Promise<void> {
+        this.db.create(table);
+    }
+
     async delete(table: string): Promise<void> {
         this.db.delete(table);
     }
@@ -34,24 +49,3 @@ export class DatabaseService {
         this.db.close();
     }
 }
-
-/*
-
-// In your application
-import { DatabaseService } from './databaseService';
-
-// Create a database service instance (e.g., using SQLite or PostgreSQL)
-const dbService = new DatabaseService(false, 'path/to/database.sqlite');  // false for SQLite
-dbService.connect();
-
-// Insert a new record
-dbService.insert('users', { name: 'John Doe', email: 'john.doe@example.com' });
-
-// Query data
-const users = dbService.query('SELECT * FROM users');
-console.log(users);
-
-// Close the connection
-dbService.close();
-
-*/
