@@ -1,1 +1,0 @@
--- Add your PostgreSQL setup script here
