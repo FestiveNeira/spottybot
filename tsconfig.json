@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "rootDir": "./",
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    // Connects to backend .ts files
+    "backend/src/**/*.ts",
+    // Connects to database .ts files
+    "database/src/**/*.ts",
+    // Connects to desktop .ts files
+    "desktop/src/**/*.ts"
+  ]
+}

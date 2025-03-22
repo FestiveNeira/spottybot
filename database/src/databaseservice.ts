@@ -6,7 +6,7 @@ import { PostgresAdapter } from './adapters/postgresql';
 export class DatabaseService {
     private db: DatabaseInterface;
 
-    constructor(usePostgres: boolean, dbPathOrConnectionString: string) {
+    constructor(usePostgres: boolean = false, dbPathOrConnectionString: string /* = path/to/database.sqlite*/) {
         if (usePostgres) {
             this.db = new PostgresAdapter(dbPathOrConnectionString); // Connection String for Postgres
         } else {
