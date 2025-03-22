@@ -7,16 +7,39 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug Backend",
-            "runtimeArgs": ["-r", "ts-node/register"],
+            "name": "Debug Program",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/backend/src/index.ts",
-            "cwd": "${workspaceFolder}/backend",
+            "program": "${workspaceFolder}/dist/desktop/src/desktop.js",
+            "cwd": "${workspaceFolder}/dist/desktop/src",
             "outFiles": [
-                "${workspaceFolder}/backend/dist/**/*.js"
+                "${workspaceFolder}/dist/**/*.js"
             ]
+        },
+        {
+            "name": "Launch Electron",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+            "args": [
+                "${workspaceFolder}/desktop/src/desktop.ts"
+            ],
+            "cwd": "${workspaceFolder}",
+            "windows": {
+                "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+            },
+            "outFiles": [
+                "${workspaceFolder}/desktop/dist/**/*.js"
+            ],
+            "preLaunchTask": "tsc: build",
+            "sourceMaps": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
         }
     ]
 }

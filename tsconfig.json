@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
-    "outDir": "dist",
+    "outDir": "dist", // Replace with ./ for .js to appear in .ts folders
     "rootDir": "./",
     "strict": true,
     "esModuleInterop": true
@@ -14,5 +14,8 @@
     "database/src/**/*.ts",
     // Connects to desktop .ts files
     "desktop/src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
