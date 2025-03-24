@@ -1,16 +1,17 @@
 {
-  "name": "app",
+  "name": "spotify_sortinator",
   "version": "1.0.0",
-  "main": "desktop.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "npx electron dist/main.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Juniper Vanevenhoven",
   "license": "ISC",
-  "description": "",
+  "description": "An app for efficiently sorting Spotify songs and playlists.",
   "dependencies": {
-    "@types/express": "^5.0.0",
     "better-sqlite3": "^11.9.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -20,7 +21,7 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
-    "@types/electron": "^1.4.38",
+    "@types/express": "^5.0.0",
     "@types/node": "^22.13.11",
     "@types/pg": "^8.11.11",
     "electron": "^35.0.3",

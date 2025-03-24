@@ -5,7 +5,7 @@ import copy from 'rollup-plugin-copy';
 export default defineConfig({
 	plugins: [sveltekit(), copy({
 		targets: [
-		  { src: 'public/**/*', dest: '../desktop/resources' }
+		  // { src: 'public/**/*', dest: '../src/desktop/resources' } // Uncomment if you need Svelte to build multiple locations
 		]
 	  })]
 });

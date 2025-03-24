@@ -5,41 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug Electron (Compiled JS)",
             "type": "node",
             "request": "launch",
-            "name": "Debug Program",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register"
-            ],
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/dist/desktop/src/desktop.js",
-            "cwd": "${workspaceFolder}/dist/desktop/src",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
-        },
-        {
-            "name": "Launch Electron",
-            "type": "node",
-            "request": "launch",
+            "preLaunchTask": "Compile TypeScript",
             "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-            "args": [
-                "${workspaceFolder}/desktop/src/desktop.ts"
-            ],
-            "cwd": "${workspaceFolder}",
             "windows": {
                 "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
             },
-            "outFiles": [
-                "${workspaceFolder}/desktop/dist/**/*.js"
-            ],
-            "preLaunchTask": "tsc: build",
-            "sourceMaps": true,
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen"
+            "program": "${workspaceFolder}/dist/main.js",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "sourceMaps": true
         }
     ]
 }

@@ -2,18 +2,15 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
-    "outDir": "dist", // Replace with ./ for .js to appear in .ts folders
-    "rootDir": "./",
+    "outDir": "dist",
+    "rootDir": "./src",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "sourceMap": true
   },
   "include": [
-    // Connects to backend .ts files
-    "backend/src/**/*.ts",
-    // Connects to database .ts files
-    "database/src/**/*.ts",
-    // Connects to desktop .ts files
-    "desktop/src/**/*.ts"
+    // Connects .ts files
+    "src/**/*.ts",
   ],
   "exclude": [
     "node_modules"

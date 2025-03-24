@@ -7,7 +7,7 @@ let backendProcess: any;
 
 function startBackend() {
     // Path to your backend's entry point file (adjust this to match your structure)
-    const backendPath = path.join(__dirname, '../backend/src/index.ts'); 
+    const backendPath = path.join(__dirname, '../backend/src/backend.ts'); 
 
     // Spawn the backend process (assuming you are using TypeScript)
     // You may need to use ts-node or compile the backend to JavaScript first
