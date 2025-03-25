@@ -4,6 +4,8 @@ import http from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 
+import { startServer, stopServer } from './webserver';
+
 const app = express();
 const cors = require('cors');
 const server = http.createServer(app);
@@ -13,8 +15,6 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 });
-
-const { startServer, stopServer } = require('./webserver.ts');
 
 // Enable CORS if frontend and backend are on different ports
 app.use(cors());
@@ -30,8 +30,7 @@ app.get('/api/data', (req: Request, res: Response): void => {
     res.json({ message: `Hello, ${name}!` });
 });
 */
-Request
-Response
+
 // Example POST endpoint
 app.post('/api/data', (req: Request, res: Response) => {
     const name = req.body.name;

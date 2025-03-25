@@ -1,4 +1,25 @@
 node_modules/
 dist/
-frontend/.svelte-kit/
-desktop/neutralino-app/bin/
+src/frontend/public/build/
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/build
+/dist
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

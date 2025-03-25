@@ -9,10 +9,10 @@
     "sourceMap": true
   },
   "include": [
-    // Connects .ts files
-    "src/**/*.ts",
+    // Connects .ts files not in frontend, frontend compilation is handled by rollup
+    "src/**/*",
   ],
   "exclude": [
-    "node_modules"
+    "node_modules", "src/frontend"
   ]
 }

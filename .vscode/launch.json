@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Electron (Compiled JS)",
+            "name": "Debug App (Compiled JS)",
             "type": "node",
             "request": "launch",
-            "preLaunchTask": "Compile TypeScript",
+            "preLaunchTask": "BuildDist",
             "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
             "windows": {
                 "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
             },
-            "program": "${workspaceFolder}/dist/main.js",
+            "program": "${workspaceFolder}/dist/desktop/desktop.js",
             "args": [],
             "cwd": "${workspaceFolder}",
             "sourceMaps": true
