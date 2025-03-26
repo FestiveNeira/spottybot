@@ -63,7 +63,7 @@ function createWindow() {
     });
 
     // Load the static Svelte build (ensure the path to the built `index.html` is correct)
-    let webfile = path.join(__dirname, '../../frontend/public/index.html');
+    let webfile = path.join(__dirname, '../frontend/index.html');
     mainWindow.loadFile(webfile);
 
     // Open DevTools for debugging (optional)

@@ -18,7 +18,7 @@
         {
             "label": "BuildDist",
             "type": "shell",
-            "command": "npx tsc; rollup -c",
+            "command": "npx tsc",
             "problemMatcher": [],
             "group": "build"
         }
