@@ -1,18 +1,30 @@
 import svelte from 'rollup-plugin-svelte';
 import { defineConfig } from 'rollup';
 import { sveltePreprocess } from 'svelte-preprocess';
-import css from 'rollup-plugin-css-only';
+import postcss from 'rollup-plugin-postcss';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
+import copy from 'rollup-plugin-copy';
+import fs from 'fs';
+import path from 'path';
+
+// Dynamically find all .ts entry files in the frontend folder
+const entryPoints = fs.readdirSync('src/frontend/pages')
+  .filter(file => file.endsWith('.ts')) // Get only .ts files
+  .reduce((entries, file) => {
+    const name = path.parse(file).name;
+    entries[name] = `src/frontend/pages/${file}`;
+    return entries;
+  }, {});
 
 export default defineConfig({
-  input: 'src/frontend/main.ts',  // Entry file for Svelte
+  input: entryPoints,  // Entry file for Svelte
   output: {
     sourcemap: true,
-    format: 'iife',  // Immediately-invoked function expression (for browsers)
-    name: 'app',
-    file: 'dist/frontend/build/bundle.js', // Output file
+    format: 'esm',
+    dir: 'dist/frontend/build', // Output location
+    entryFileNames: '[name].js', // Output file name
   },
   plugins: [
     svelte({
@@ -20,8 +32,17 @@ export default defineConfig({
       compilerOptions: {
         dev: true,
       },
+      emitCss: true,  // ✅ Enables per-component CSS output
     }),
-    css({ output: 'bundle.css' }),
+    postcss({
+      extract: true,  // ✅ Extracts CSS into separate files
+      inject: false,  // Prevents injecting styles into JS
+    }),
+    copy({
+      targets: [
+        { src: ['src/frontend/pages/*.html', 'src/frontend/global/**/*'], dest: 'dist/frontend' }, // Copy HTML files
+      ]
+    }),
     resolve({
       browser: true,
       dedupe: ['svelte'],

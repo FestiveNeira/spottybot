@@ -6,8 +6,8 @@
         "verbatimModuleSyntax": true
     },
     "include": [
-        "./*"
-    ],
+        "./**/*"
+, "pages/main.ts"    ],
     "exclude": [
         "node_modules/*",
         "__sapper__/*",
