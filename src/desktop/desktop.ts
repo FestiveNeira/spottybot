@@ -9,7 +9,7 @@ let mainWindow: BrowserWindow | null = null;
 function isBackendRunning(): Promise<boolean> {
     return new Promise((resolve) => {
         const testConnection = require('http').request(
-            { hostname: 'localhost', port: 3000, timeout: 500 },
+            { hostname: 'localhost', port: 8888, timeout: 500 },
             () => resolve(true)
         );
         testConnection.on('error', () => resolve(false));
@@ -28,14 +28,14 @@ async function startBackend() {
 
     backendProcess = spawn('node', [path.join(__dirname, '../backend/backend')], {
         stdio: 'inherit',
-        env: { ...process.env, PORT: '3000' }
+        env: { ...process.env, PORT: '8888' }
     });
 
     backendProcess.on('close', (code) => {
         if (code && code !== 0) {
             console.error(`Backend exited with code ${code}. Restarting...`);
             backendProcess = null;
-            setTimeout(startBackend, 3000);
+            setTimeout(startBackend, 2500);
         }
         else {
             console.log(`Backend closed`);

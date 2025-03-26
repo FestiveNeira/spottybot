@@ -10,7 +10,10 @@ webapp.use(cors());
 webapp.use(express.json());
 
 // Serve the Svelte app from the dist folder
-webapp.use(express.static(path.join(__dirname, '../../frontend/public')));
+webapp.use(express.static(path.join(__dirname, '../frontend')));
+webapp.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/main.html'));
+});
 
 let webserver: ReturnType<typeof webapp.listen> | null = null;
 

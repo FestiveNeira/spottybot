@@ -1,10 +1,10 @@
 import { mount } from 'svelte';
-import App from './main.svelte';
+import App from './overlay.svelte';
 
 const app = mount(App, {
   target: document.body,
   props: {
-    name: 'main'
+    name: 'overlay'
   }
 });
 

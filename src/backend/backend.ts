@@ -39,6 +39,10 @@ app.post('/api/data', (req: Request, res: Response) => {
 });
 
 //------------------------------------------------------------------------------------------
+app.get('/webserver/get-state', (req: Request, res: Response): void => {
+    res.json({ serverRunning: serverRunning });
+});
+
 app.post('/webserver/toggle-server', (req: Request, res: Response) => {
     serverRunning = !serverRunning;
     if (serverRunning) {
@@ -77,7 +81,7 @@ io.on('connection', (socket: any) => {
 //server.use('/spotify', spotifyRouter);
 
 // Start backend server
-const port = 3000;
+const port = 8888;
 server.listen(port, '0.0.0.0', () => {
     console.log(`Backend server running on http://localhost:${port}`);
 });

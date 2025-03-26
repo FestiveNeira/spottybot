@@ -1,13 +1,14 @@
-import svelte from 'rollup-plugin-svelte';
-import { defineConfig } from 'rollup';
-import { sveltePreprocess } from 'svelte-preprocess';
-import postcss from 'rollup-plugin-postcss';
-import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import typescript from 'rollup-plugin-typescript2';
-import copy from 'rollup-plugin-copy';
+import resolve from '@rollup/plugin-node-resolve';
 import fs from 'fs';
 import path from 'path';
+import { defineConfig } from 'rollup';
+import copy from 'rollup-plugin-copy';
+import css from 'rollup-plugin-css-only';
+import del from 'rollup-plugin-delete';
+import svelte from 'rollup-plugin-svelte';
+import typescript from 'rollup-plugin-typescript2';
+import { sveltePreprocess } from 'svelte-preprocess';
 
 // Dynamically find all .ts entry files in the frontend folder
 const entryPoints = fs.readdirSync('src/frontend/pages')
@@ -25,18 +26,30 @@ export default defineConfig({
     format: 'esm',
     dir: 'dist/frontend/build', // Output location
     entryFileNames: '[name].js', // Output file name
+    chunkFileNames: '[name]-[hash].js', // Forces clear chunk names
   },
   plugins: [
+    del({ targets: 'dist/frontend/*', runOnce: true }), // Clears the folder before building
     svelte({
       preprocess: sveltePreprocess({ sourceMap: true }),
       compilerOptions: {
-        dev: true,
-      },
-      emitCss: true,  // ✅ Enables per-component CSS output
+        dev: true
+      }
     }),
-    postcss({
-      extract: true,  // ✅ Extracts CSS into separate files
-      inject: false,  // Prevents injecting styles into JS
+    css({
+      // This was a fun little nightmare
+      // For each .svelte file extract it's css to a separate file in the dist/frontend/build directory
+      output: (styles, styleNodes) => {
+        if (!fs.existsSync('dist/frontend/build')) {
+          fs.mkdirSync('dist/frontend/build', { recursive: true });
+        }
+        for (const [srcpath, cssContent] of Object.entries(styleNodes)) {
+          const srcfile = path.parse(srcpath);
+          const filePath = path.join(`${srcpath}`, '../../../../dist/frontend/build', srcfile.base);
+          fs.writeFileSync(filePath, cssContent);
+          console.log(`✅ CSS extracted: ${filePath}`);
+        }
+      },
     }),
     copy({
       targets: [
