@@ -1,6 +1,10 @@
+<!------------------------------ TypeScript Starts Here ------------------------------>
+
 <script lang="ts">
 	const { name } = $props<{ name?: string }>();
 </script>
+
+<!------------------------------ HTML Starts Here ------------------------------>
 
 <main>
 	<h1>Hello {name}!</h1>
@@ -9,6 +13,8 @@
 		how to build Svelte apps.
 	</p>
 </main>
+
+<!------------------------------ CSS Starts Here ------------------------------>
 
 <style>
 	main {

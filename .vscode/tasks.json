@@ -18,7 +18,7 @@
         {
             "label": "BuildDist",
             "type": "shell",
-            "command": "npx tsc",
+            "command": "npx tsc; npm run buildsv",
             "problemMatcher": [],
             "group": "build"
         }

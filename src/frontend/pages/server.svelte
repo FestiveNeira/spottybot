@@ -8,6 +8,39 @@
 
 	const { name } = $props<{ name?: string }>();
 
+	const socket = io(`http://${ip}:${port}`);
+
+	let serverRunning = $state(false);
+
+	onMount(async () => {
+		try {
+			let response = await fetch(
+				`http://${ip}:${port}/webserver/get-state`,
+				{
+					method: "GET",
+				},
+			);
+			const data = await response.json(); // Assuming JSON response
+
+			// Now destructure 'serverRunning' from the fetched data
+			serverRunning = data.serverRunning; // Or whatever the name is in your JSON response
+		} catch (error) {
+			console.error("Error fetching server state:", error);
+		}
+	});
+
+	// Update the store when the server status changes
+	socket.on("statusUpdate", (status) => {
+		serverRunning = status;
+	});
+
+	// Toggle server state when the checkbox is clicked
+	function toggleServer() {
+		fetch(`http://${ip}:${port}/webserver/toggle-server`, {
+			method: "POST",
+		});
+	}
+
 	// Test Function
 	var testname = $state("");
 	var responseMessage = $state("");
@@ -43,6 +76,15 @@
 	<if out>
 		<p>{responseMessage}</p>
 	</if>
+	<br />
+	<label>
+		<input
+			type="checkbox"
+			bind:checked={serverRunning}
+			onchange={toggleServer}
+		/>
+		Server is {serverRunning ? "running" : "stopped"}
+	</label>
 </main>
 
 <!------------------------------ CSS Starts Here ------------------------------>
@@ -56,7 +98,7 @@
 	}
 
 	h1 {
-		color: #750052;
+		color: #ff3e00;
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;

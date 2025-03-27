@@ -1,11 +1,10 @@
-// Switch over to import syntax?
 import express, { Request, Response } from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
 import path from 'path';
-
+import { Server } from 'socket.io';
 import { startServer, stopServer } from './webserver';
 
+const port = 8888;
 const app = express();
 const cors = require('cors');
 const server = http.createServer(app);
@@ -16,20 +15,11 @@ const io = new Server(server, {
     }
 });
 
-// Enable CORS if frontend and backend are on different ports
-app.use(cors());
-// Allows json parsing in post endpoints
-app.use(express.json());
+app.use(cors()); // Enable CORS if frontend and backend are on different ports
+app.use(express.json()); // Allows json parsing in post endpoints
 
 let serverRunning = false;
 const sockets = new Map();
-
-/*/ Example GET endpoint
-app.get('/api/data', (req: Request, res: Response): void => {
-    const name = req.query.name as string;
-    res.json({ message: `Hello, ${name}!` });
-});
-*/
 
 // Example POST endpoint
 app.post('/api/data', (req: Request, res: Response) => {
@@ -63,7 +53,7 @@ app.post('/webserver/toggle-server', (req: Request, res: Response) => {
 // WebSocket connection
 io.on('connection', (socket: any) => {
     console.log('A client connected:', socket.id);
-    sockets.set(socket.id, socket);
+    sockets.set(socket.handshake.headers.origin, socket);
 
     // socket.handshake.headers.origin = host address (how I can tell the ports apart)
     // Tomorrow implement a way to update the site immediately before the server is closed so the closed server can't issue webhook requests
@@ -78,10 +68,16 @@ io.on('connection', (socket: any) => {
 });
 //------------------------------------------------------------------------------------------
 
-//server.use('/spotify', spotifyRouter);
-
 // Start backend server
-const port = 8888;
 server.listen(port, '0.0.0.0', () => {
     console.log(`Backend server running on http://localhost:${port}`);
+});
+
+// Serve the server settings app on the server port
+app.use(express.static(path.join(__dirname, '../frontend')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/server.html'));
+});
+app.listen(port, () => {
+    console.log(`Web server running at http://localhost:${port}`);
 });
