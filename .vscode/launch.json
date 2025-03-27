@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug App (Compiled JS)",
             "type": "node",
             "request": "launch",
-            "name": "Debug Backend",
-            "runtimeArgs": ["-r", "ts-node/register"],
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/backend/src/index.ts",
-            "cwd": "${workspaceFolder}/backend",
-            "outFiles": [
-                "${workspaceFolder}/backend/dist/**/*.js"
-            ]
+            "preLaunchTask": "BuildDist",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+            "windows": {
+                "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+            },
+            "program": "${workspaceFolder}/dist/desktop/desktop.js",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "sourceMaps": true
         }
     ]
 }

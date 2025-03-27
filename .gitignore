@@ -1,4 +1,8 @@
 node_modules/
-dist/
-frontend/.svelte-kit/
-desktop/neutralino-app/bin/
+
+# Output
+/build
+/dist
+
+# OS
+.DS_Store

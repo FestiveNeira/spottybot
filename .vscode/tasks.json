@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CompileTS",
+            "type": "shell",
+            "command": "npx tsc",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "RollupSV",
+            "type": "shell",
+            "command": "rollup -c",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "BuildDist",
+            "type": "shell",
+            "command": "npx tsc; npm run buildsv",
+            "problemMatcher": [],
+            "group": "build"
+        }
+    ]
+}
