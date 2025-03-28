@@ -3,8 +3,8 @@
 This project includes:
 - **Frontend**: Svelte
 - **Backend**: Node.js with TypeScript
-- **Database**: PostgreSQL (Portable!!!)
-- **Desktop App**: Neutralino with an Overlay (GLFW, Ultralight, OpenGL)
+- **Database**: SQLite (embedded) or PostgreSQL (If set up by user)
+- **Desktop App**: Electron with an Overlay
 
 ## App Planned Functionality
 
