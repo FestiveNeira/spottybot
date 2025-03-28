@@ -13,3 +13,5 @@
 - maybe think about
     - linter
     - unit tests
+
+- if unit tests, make run before merge?
