@@ -15,3 +15,15 @@
     - unit tests
 
 - if unit tests, make run before merge?
+
+
+----------------
+
+- get prettier working ?
+- get eslint working ?
+
+
+- how run postgres server? docker?
+- how run backend server? docker?
+
+- logs?
