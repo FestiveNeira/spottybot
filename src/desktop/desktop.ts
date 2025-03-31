@@ -1,14 +1,14 @@
-import { app, BrowserWindow } from 'electron';
 import { spawn } from 'child_process';
-import path from 'path';
+import { app, BrowserWindow } from 'electron';
+import http from 'http';
 
 let backendProcess: ReturnType<typeof spawn> | null = null;
 let mainWindow: BrowserWindow | null = null;
 
-// Check if backend is already running (optional: improves reliability)
+// Send an http request to backend to see if it's running
 function isBackendRunning(): Promise<boolean> {
     return new Promise((resolve) => {
-        const testConnection = require('http').request(
+        const testConnection = http.request(
             { hostname: 'localhost', port: 8888, timeout: 500 },
             () => resolve(true)
         );
@@ -17,6 +17,7 @@ function isBackendRunning(): Promise<boolean> {
     });
 }
 
+// Start the backend process
 async function startBackend() {
     const alreadyRunning = await isBackendRunning();
     if (alreadyRunning) {
@@ -26,7 +27,8 @@ async function startBackend() {
 
     console.log('Starting backend...');
 
-    backendProcess = spawn('node', [path.join(__dirname, '../backend/backend')], {
+    // Using path relative to root because spawn defaults to working directory (works in dev may not work in prod, needs research/testing)
+    backendProcess = spawn('node', ['dist/backend/backend.js'], {
         stdio: 'inherit',
         env: { ...process.env, PORT: '8888' }
     });
@@ -47,8 +49,8 @@ async function startBackend() {
     });
 }
 
+// Create the browser window
 function createWindow() {
-    // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -58,15 +60,14 @@ function createWindow() {
         frame: true,
         transparent: false,
         webPreferences: {
-            nodeIntegration: true, // Enables Node.js integration in the renderer process
+            nodeIntegration: true
         }
     });
 
-    // Load the static Svelte build (ensure the path to the built `index.html` is correct)
-    let webfile = path.join(__dirname, '../frontend/main.html');
-    mainWindow.loadFile(webfile);
+    // Load the static Svelte build
+    mainWindow.loadFile('../frontend/main.html');
 
-    // Open DevTools for debugging (optional)
+    // Open DevTools for debugging
     mainWindow.webContents.openDevTools();
 
     mainWindow.on('ready-to-show', mainWindow.show);

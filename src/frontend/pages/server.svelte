@@ -12,6 +12,7 @@
 
 	let serverRunning = $state(false);
 
+	// Upon mounting get the serverRunning state
 	onMount(async () => {
 		try {
 			let response = await fetch(
@@ -20,16 +21,15 @@
 					method: "GET",
 				},
 			);
-			const data = await response.json(); // Assuming JSON response
+			const data = await response.json();
 
-			// Now destructure 'serverRunning' from the fetched data
-			serverRunning = data.serverRunning; // Or whatever the name is in your JSON response
+			serverRunning = data.serverRunning;
 		} catch (error) {
 			console.error("Error fetching server state:", error);
 		}
 	});
 
-	// Update the store when the server status changes
+	// Update the store when the server status changes (webhooks example!)
 	socket.on("statusUpdate", (status) => {
 		serverRunning = status;
 	});
@@ -42,8 +42,8 @@
 	}
 
 	// Test Function
-	var testname = $state("");
-	var responseMessage = $state("");
+	let testname = $state("");
+	let responseMessage = $state("");
 	async function greet() {
 		const response = await fetch(`http://${ip}:${port}/api/data`, {
 			method: "POST",

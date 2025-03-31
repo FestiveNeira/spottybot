@@ -1,6 +1,6 @@
-import { DatabaseInterface } from './interfaces/databaseinterface';
-import { SQLiteAdapter } from './adapters/sqlite';
-import { PostgresAdapter } from './adapters/postgresql';
+import { DatabaseInterface } from './interfaces/databaseinterface.js';
+import { SQLiteAdapter } from './adapters/sqlite.js';
+import { PostgresAdapter } from './adapters/postgresql.js';
 
 // Factory to return the appropriate database adapter based on the user's choice
 export class DatabaseService {

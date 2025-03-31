@@ -1,20 +1,18 @@
-import express, { Express } from 'express';  // Import express and the Express type
-import path from 'path';  // Import path module for handling file paths
-import cors from 'cors';  // Import cors module for handling cross-origin requests
+import cors from 'cors';
+import express from 'express';
 
-const webapp: Express = express();  // Define the express app with the correct type
-const webport: number = 3000;  // Port number for the web server
+const webapp = express();
+const webport = 3000;
 
 // Enable CORS and JSON parsing for the app
 webapp.use(cors());
 webapp.use(express.json());
 
-// Serve the Svelte app from the dist folder
-webapp.use(express.static(path.join(__dirname, '../frontend')));
+// Set up main Svelte web app
+webapp.use(express.static('../frontend'));
 webapp.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/main.html'));
+    res.sendFile('../frontend/main.html');
 });
-
 let webserver: ReturnType<typeof webapp.listen> | null = null;
 
 // Function to start the server
@@ -32,5 +30,3 @@ export function stopServer() {
         });
     }
 }
-
-module.exports = { startServer, stopServer };

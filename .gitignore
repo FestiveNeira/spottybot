@@ -1,8 +1,9 @@
-node_modules/
+node_modules
+reference
 
 # Output
-/build
-/dist
+build
+dist
 
-# OS
-.DS_Store
+# Editor directories and files
+.vscode/*

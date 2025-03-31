@@ -9,8 +9,8 @@
 	const { name } = $props<{ name?: string }>();
 
 	// Test Function
-	var testname = $state("");
-	var responseMessage = $state("");
+	let testname = $state("");
+	let responseMessage = $state("");
 	async function greet() {
 		const response = await fetch(`http://${ip}:${port}/api/data`, {
 			method: "POST",
@@ -31,7 +31,7 @@
 <!------------------------------ HTML Starts Here ------------------------------>
 
 <main>
-	<h1>Hello {name}!</h1>
+	<h1>Hello {name} test is test!</h1>
 	<p>
 		Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
 		how to build Svelte apps.

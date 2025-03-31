@@ -1,4 +1,4 @@
-import { DatabaseService } from '../database/databaseservice';
+import { DatabaseService } from '../database/databaseservice.js';
 
 // Not sure what path will be yet
 const sqlitepath = 'path/to/database.sqlite';

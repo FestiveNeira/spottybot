@@ -1,4 +1,4 @@
-import { DatabaseInterface } from '../interfaces/databaseinterface';
+import { DatabaseInterface } from '../interfaces/databaseinterface.js';
 import { Client } from 'pg';
 
 export class PostgresAdapter implements DatabaseInterface {

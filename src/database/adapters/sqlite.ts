@@ -1,4 +1,4 @@
-import { DatabaseInterface } from '../interfaces/databaseinterface';
+import { DatabaseInterface } from '../interfaces/databaseinterface.js';
 import Database from 'better-sqlite3';
 
 export class SQLiteAdapter implements DatabaseInterface {

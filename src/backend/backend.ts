@@ -1,12 +1,12 @@
+import cors from 'cors';
 import express, { Request, Response } from 'express';
 import http from 'http';
-import path from 'path';
 import { Server } from 'socket.io';
-import { startServer, stopServer } from './webserver';
+import { startServer, stopServer } from './webserver.js';
 
 const port = 8888;
+const sockets = new Map();
 const app = express();
-const cors = require('cors');
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -14,12 +14,11 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 });
-
-app.use(cors()); // Enable CORS if frontend and backend are on different ports
-app.use(express.json()); // Allows json parsing in post endpoints
-
 let serverRunning = false;
-const sockets = new Map();
+
+// Enable CORS and JSON parsing for the app
+app.use(cors());
+app.use(express.json());
 
 // Example POST endpoint
 app.post('/api/data', (req: Request, res: Response) => {
@@ -28,11 +27,12 @@ app.post('/api/data', (req: Request, res: Response) => {
     res.json({ message: `Hello, ${name}!` });
 });
 
-//------------------------------------------------------------------------------------------
+// Example GET endpoint (actually useful though)
 app.get('/webserver/get-state', (req: Request, res: Response): void => {
     res.json({ serverRunning: serverRunning });
 });
 
+// Example POST endpoint (again) (actually useful though)
 app.post('/webserver/toggle-server', (req: Request, res: Response) => {
     serverRunning = !serverRunning;
     if (serverRunning) {
@@ -53,10 +53,11 @@ app.post('/webserver/toggle-server', (req: Request, res: Response) => {
 // WebSocket connection
 io.on('connection', (socket: any) => {
     console.log('A client connected:', socket.id);
+    // Sockets array tracks connections, just in case we need them for something, currently unused
     sockets.set(socket.handshake.headers.origin, socket);
 
     // socket.handshake.headers.origin = host address (how I can tell the ports apart)
-    // Tomorrow implement a way to update the site immediately before the server is closed so the closed server can't issue webhook requests
+    // todo: Implement a way to update the site immediately before the server is closed so the closed server can't issue webhook requests
 
     // Send initial server status when a new client connects
     socket.emit('statusUpdate', serverRunning);
@@ -66,17 +67,16 @@ io.on('connection', (socket: any) => {
         sockets.delete(socket.id);
     });
 });
-//------------------------------------------------------------------------------------------
 
 // Start backend server
 server.listen(port, '0.0.0.0', () => {
     console.log(`Backend server running on http://localhost:${port}`);
 });
 
-// Serve the server settings app on the server port
-app.use(express.static(path.join(__dirname, '../frontend')));
+// Serve the server settings app on the server port (will be used for configuring server)
+app.use(express.static('../frontend'));
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/server.html'));
+    res.sendFile('../frontend/server.html');
 });
 app.listen(port, () => {
     console.log(`Web server running at http://localhost:${port}`);
