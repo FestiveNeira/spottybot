@@ -1,0 +1,29 @@
+- make two endpoints. 
+    - post/put `save current song to database list`
+        - "get current playing spotify song"
+        - store some info to database
+        - return some output to endpoint response
+    - get songs
+        - returns json object with all the songs in the db
+    - good to get feel for...
+        - postgres server
+        - spotify api
+        - information flow
+        - database user schema
+- maybe think about
+    - linter
+    - unit tests
+
+- if unit tests, make run before merge?
+
+
+----------------
+
+- get prettier working ?
+- get eslint working ?
+
+
+- how run postgres server? docker?
+- how run backend server? docker?
+
+- logs?

@@ -2,50 +2,25 @@ import { DatabaseInterface } from './interfaces/databaseinterface.js';
 import { SQLiteAdapter } from './adapters/sqlite.js';
 import { PostgresAdapter } from './adapters/postgresql.js';
 
-// Factory to return the appropriate database adapter based on the user's choice
-export class DatabaseService {
-    private db: DatabaseInterface;
+// Factory for making DatabaseInterface instances
+export  class DatabaseFactory {
+    // if you're trying to make one of these, you're doing it wrong
+    private constructor() {
+        throw new Error('DatabaseFactory constructor is private. Use DatabaseFactory.NewDatabase() instead.');
+    } 
 
-    constructor(usePostgres: boolean = false, dbPathOrConnectionString: string /* = path/to/database.sqlite*/) {
+    /**
+        Factory method to create a new database instance
+
+        usePostgres: true for Postgres, false for SQLite
+
+        TODO(jruth) does this need to be async? 
+    */
+    static NewDatabase(usePostgres: boolean = false, dbPathOrConnectionString: string /* = path/to/database.sqlite*/): DatabaseInterface {
         if (usePostgres) {
-            this.db = new PostgresAdapter(dbPathOrConnectionString); // Connection String for Postgres
+           return new PostgresAdapter(dbPathOrConnectionString); // Connection String for Postgres
         } else {
-            this.db = new SQLiteAdapter(dbPathOrConnectionString); // Path to SQLite file
+            return new SQLiteAdapter(dbPathOrConnectionString); // Path to SQLite file
         }
-    }
-
-    // Not sure if I should do this, but we'll leave it for now
-    async swapdb(usePostgres: boolean, dbPathOrConnectionString: string) {
-        await this.close();
-        if (usePostgres) {
-            this.db = new PostgresAdapter(dbPathOrConnectionString); // Connection String for Postgres
-        } else {
-            this.db = new SQLiteAdapter(dbPathOrConnectionString); // Path to SQLite file
-        }
-        await this.connect();
-    }
-
-    async connect(): Promise<void> {
-        this.db.connect();
-    }
-
-    async query<T extends object>(sql: string, params?: any[]): Promise<T[]> {
-        return this.db.query(sql, params);
-    }
-
-    async insert<T extends object>(table: string, data: T): Promise<void> {
-        this.db.insert(table, data);
-    }
-
-    async create(table: string): Promise<void> {
-        this.db.create(table);
-    }
-
-    async delete(table: string): Promise<void> {
-        this.db.delete(table);
-    }
-
-    async close(): Promise<void> {
-        this.db.close();
     }
 }
