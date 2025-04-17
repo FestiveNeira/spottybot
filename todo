@@ -19,6 +19,10 @@
 
 ----------------
 
+- server stored user settings
+- endpoint for transferring userdata between servers
+- recognize when a new user visits the server and pprompt them to import settings from another server
+
 - get prettier working ?
 - get eslint working ?
 

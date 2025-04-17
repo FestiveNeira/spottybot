@@ -42,7 +42,7 @@ function virtualHtmlPlugin(template: string): Plugin {
 export default defineConfig({
   base: './',
   plugins: [
-    svelte({ configFile: 'config/svelte.config.js' }),
+    svelte({ configFile: 'svelte.config.js' }),
     virtualHtmlPlugin('src/frontend/template.html'),
   ],
   build: {
