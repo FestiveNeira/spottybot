@@ -1,9 +1,9 @@
 <!------------------------------ TypeScript Starts Here ------------------------------>
-
 <script lang="ts">
+	// todo: there's probably a way to use webhooks to do away with serverRunning
 	import { io } from "socket.io-client";
 	import { onMount } from "svelte";
-	let ip = "192.168.1.169";
+	let ip = "192.168.1.139";
 	let port = "8888";
 
 	const { name } = $props<{ name?: string }>();
@@ -15,12 +15,9 @@
 	// Upon mounting get the serverRunning state
 	onMount(async () => {
 		try {
-			let response = await fetch(
-				`http://${ip}:${port}/webserver/get-state`,
-				{
-					method: "GET",
-				},
-			);
+			let response = await fetch("/webserver/get-state", {
+				method: "GET",
+			});
 			const data = await response.json();
 
 			serverRunning = data.serverRunning;
@@ -36,7 +33,7 @@
 
 	// Toggle server state when the checkbox is clicked
 	function toggleServer() {
-		fetch(`http://${ip}:${port}/webserver/toggle-server`, {
+		fetch("/webserver/toggle-server", {
 			method: "POST",
 		});
 	}
@@ -45,7 +42,7 @@
 	let testname = $state("");
 	let responseMessage = $state("");
 	async function greet() {
-		const response = await fetch(`http://${ip}:${port}/api/data`, {
+		const response = await fetch("/api/data", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

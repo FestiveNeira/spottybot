@@ -1,4 +1,20 @@
+// The warning below is intentional. TypeScript thinks there should be .svelte viles in the include directory, but vite handles compiling those files.
 {
-  "files": [],
-  "extends":"./config/tsconfig.backend.json"
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "nodenext",
+    "esModuleInterop": true,
+    "moduleResolution": "nodenext",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "rootDir": "src",
+    "sourceMap": true,
+    "strict": true,
+  },
+  "include": [
+    "src/backend/**/*.ts",
+    "src/database/**/*.ts",
+    "src/desktop/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
 }

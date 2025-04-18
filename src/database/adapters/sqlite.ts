@@ -1,47 +1,90 @@
 import { DatabaseInterface } from '../interfaces/databaseinterface.js';
-import Database from 'better-sqlite3';
+import fs from 'fs';
+import sqlite3 from 'sqlite3';
+import { open, Database } from 'sqlite';
+
+interface DBMap {
+    [userId: string]: Database;
+}
 
 export class SQLiteAdapter implements DatabaseInterface {
-    private db: Database.Database | null = null;
+    private dbMap: DBMap = {};
+    private basePath: string;
 
-    constructor(private dbPath: string) {}
-
-    async connect(): Promise<void> {
-        if (this.db) return; // If already connected, do nothing
-        this.db = new Database(this.dbPath, { verbose: console.log });
+    constructor(basePath: string) {
+        this.basePath = basePath;
+        if (!fs.existsSync(basePath)) {
+            fs.mkdirSync(basePath, { recursive: true });
+        }
     }
 
-    async query<T extends object>(sql: string, params: any[] = []): Promise<T[]> {
-        if (!this.db) throw new Error('Database not connected');
-        const stmt = this.db.prepare(sql);
-        return stmt.all(...params) as T[]
+    private async getDb(userId: string): Promise<Database> {
+        if (this.dbMap[userId]) return this.dbMap[userId];
+
+        const dbPath = this.basePath + `/${userId}.sqlite`;
+        const db = await open({
+            filename: dbPath,
+            driver: sqlite3.Database,
+        });
+
+        this.dbMap[userId] = db;
+        return db;
     }
 
-    async insert<T extends object>(table: string, data: T): Promise<void> {
-        if (!this.db) throw new Error('Database not connected');
-        const columns = Object.keys(data).join(', ');
-        const placeholders = Object.keys(data).map(() => '?').join(', ');
+    async connect(userId: string): Promise<void> {
+        await this.getDb(userId); // Ensures DB is opened
+    }
+
+    async create(userId: string): Promise<void> {
+        // Get user's db file
+        const db = await this.getDb(userId);
+        // Create user ratings table
+        await db.exec(`
+      CREATE TABLE IF NOT EXISTS ${userId}.ratings (
+        timestamp INTEGER NOT NULL,
+        uri TEXT NOT NULL,
+        name TEXT NOT NULL,
+        theme TEXT NOT NULL,
+        rating INTEGER NOT NULL
+      )
+    `);
+        // todo: create user settings table
+        await db.exec(`
+      CREATE TABLE IF NOT EXISTS ${userId}.settings (
+      )
+    `);
+    }
+
+    async insert<T extends object>(userId: string, data: T): Promise<void> {
+        const db = await this.getDb(userId);
+        const keys = Object.keys(data);
         const values = Object.values(data);
-        const sql = `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`;
-        this.db.prepare(sql).run(...values);
+        const placeholders = keys.map(() => '?').join(', ');
+        const sql = `INSERT INTO ${userId} (${keys.join(', ')}) VALUES (${placeholders})`;
+        await db.run(sql, values);
     }
 
-    async create(table: string): Promise<void> {
-        if (!this.db) throw new Error('Database not connected');
-        // Type definitions may have to change especially timestamp, but this is a placeholder for now
-        const sql = `CREATE TABLE IF NOT EXISTS ${table} (timestamp INTEGER NOT NULL, uri TEXT NOT NULL, name TEXT NOT NULL, theme TEXT NOT NULL, rating INTEGER NOT NULL)`;
-        this.db.prepare(sql).run();
+    // todo: rewrite many query functions for different queries rather than a single one
+    async query<T extends object>(userId: string, sql: string, params: any[] = []): Promise<T[]> {
+        const db = await this.getDb(userId);
+        return db.all<T[]>(sql, params);
     }
 
-    async delete(table: string): Promise<void> {
-        if (!this.db) throw new Error('Database not connected');
-        const sql = `DROP TABLE ${table}`;
-        this.db.prepare(sql).run();
+    // note: Probably never used (maybe for cleanup function or server transfer?)
+    async delete(userId: string): Promise<void> {
+        const db = await this.getDb(userId);
+        // todo: Delete db
     }
 
-    async close(): Promise<void> {
-        if (this.db) {
-            this.db.close();
+    async close(userId?: string): Promise<void> {
+        if (userId && this.dbMap[userId]) {
+            await this.dbMap[userId].close();
+            delete this.dbMap[userId];
+        } else {
+            for (const id of Object.keys(this.dbMap)) {
+                await this.dbMap[id].close();
+            }
+            this.dbMap = {};
         }
     }
 }

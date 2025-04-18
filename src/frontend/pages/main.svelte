@@ -3,8 +3,6 @@
 <script lang="ts">
 	import { io } from "socket.io-client";
 	import { onMount } from "svelte";
-	let ip = "192.168.1.169";
-	let port = "8888";
 
 	const { name } = $props<{ name?: string }>();
 
@@ -12,7 +10,7 @@
 	let testname = $state("");
 	let responseMessage = $state("");
 	async function greet() {
-		const response = await fetch(`http://${ip}:${port}/api/data`, {
+		const response = await fetch("/api/data", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
