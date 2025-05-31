@@ -1,4 +1,4 @@
-import { DatabaseInterface } from '../interfaces/databaseinterface.js';
+import { DatabaseInterface } from '../types/databaseinterface.js';
 import fs from 'fs';
 import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';

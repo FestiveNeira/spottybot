@@ -1,4 +1,4 @@
-import { DatabaseInterface } from './interfaces/databaseinterface.js';
+import { DatabaseInterface } from './types/databaseinterface.js';
 import { SQLiteAdapter } from './adapters/sqlite.js';
 import { PostgresAdapter } from './adapters/postgresql.js';
 
